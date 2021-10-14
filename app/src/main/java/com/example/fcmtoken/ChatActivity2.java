@@ -78,6 +78,7 @@ public class ChatActivity2 extends AppCompatActivity {
     FirebaseUser firebaseUser;
     boolean notify = false;
     RecyclerView recyclerView2;
+    TextView text;
 
     AdapterUser adapterUser;
 
@@ -101,17 +102,12 @@ public class ChatActivity2 extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView = findViewById(R.id.chatrecycle);
+        text=findViewById(R.id.showinfo);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         uid = getIntent().getStringExtra("uid");
         Log.i(TAG,"Current user is "+uid);
         firebaseDatabase = FirebaseDatabase.getInstance();
-//        String mail = email.getText().toString().trim();
-//        DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference();
-//        HashMap<String, Object> hashMap2 = new HashMap<>();
-//        hashMap2.put("id", "3723292829");
-//        hashMap2.put("Email", mail);
-//        databaseReference2.child("Users2").push().setValue(hashMap2);
         checkUserStatus();
         users = firebaseDatabase.getReference("Chats");
 
@@ -139,9 +135,11 @@ public class ChatActivity2 extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // retrieve user data
-                name.setText("Welcome  " + user);
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                name.setText("Welcome  " + user.getEmail());
 
+
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+//                    text.setText("bxnsbbx"+dataSnapshot.getValue());
                     String nameh = "" + dataSnapshot1.child("name").getValue();
                     String msg = "" + dataSnapshot1.child("message").getValue();
                     String email = "" + dataSnapshot1.child("email").getValue();
@@ -155,7 +153,7 @@ public class ChatActivity2 extends AppCompatActivity {
                             userstatus.setText(onlinestatus);
                         } else {
                             Calendar calendar = Calendar.getInstance();
-//                            calendar.setTimeInMillis(Long.parseLong(onlinestatus));
+//
                             String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
                             userstatus.setText("Last Seen:" + timedate);
                         }
@@ -174,21 +172,12 @@ public class ChatActivity2 extends AppCompatActivity {
         });
         readMessages();
 
-//        DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference();
-//        HashMap<String, Object> hashMap2 = new HashMap<>();
-//        hashMap2.put("email","emails ");
-//        databaseReference2.child("AuthUsers").push().setValue(email.getText().toString());
-
     }
 
     private void readMessages() {
-        // show message after retrieving data
         chatList = new ArrayList<>();
-        usersList = new ArrayList<>();
-        listuer=new ArrayList<>();
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Chats");
         DatabaseReference dbref2 = FirebaseDatabase.getInstance().getReference().child("AuthUsers");
-
         String userId = dbref.push().getKey();
         Log.d(TAG,"Chat user Id "+userId);
         Toast.makeText(getApplicationContext(), "Get key value of Chat User  "+userId, Toast.LENGTH_SHORT).show();
@@ -199,21 +188,14 @@ public class ChatActivity2 extends AppCompatActivity {
         dbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 chatList.clear();
-                listuer.clear();
+
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    Users modelChat = dataSnapshot1.getValue(Users.class);
-                    ModelUsers modelChat2 = dataSnapshot1.getValue(ModelUsers.class);
-//                    Log.d(TAG, "User name: " + modelChat.getReceiver() + ", email " + modelChat.getSender() +" Message "+modelChat.message);
-                    Log.d(TAG, "All User Ids : " + modelChat.email);
-//                    Log.d(TAG, "All User Ids : " + modelChat2.email);
-                 //   if (modelChat.getSender().equalsIgnoreCase(myuid) && modelChat.getReceiver().equalsIgnoreCase(uid) ||modelChat.getReceiver().equalsIgnoreCase(myuid)&& modelChat.getSender().equalsIgnoreCase(uid)) {
-//                    chatList.add(modelChat); // add the chat in chatlist
-                       // }
-//                    adapterChat = new AdapterChat(ChatActivity2.this, chatList);
-//                    adapterChat.notifyDataSetChanged();
-//                    recyclerView.setAdapter(adapterChat);
+                    ModelChat modelChat = dataSnapshot1.getValue(ModelChat.class);
+                            chatList.add(modelChat);
+                    adapterChat = new AdapterChat(ChatActivity2.this, chatList);
+                    adapterChat.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapterChat);
                 }
             }
 
@@ -226,11 +208,7 @@ public class ChatActivity2 extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-//                usersList.clear();
                 for (DataSnapshot dataSnapshot2 : dataSnapshot.getChildren()) {
-//                    Model_User users = dataSnapshot2.getValue(Model_User.class);
-//                    Log.d(TAG, "All User Ids : " + users.getEmail());
-//                    usersList.add(users);
                 }
             }
 
@@ -239,10 +217,6 @@ public class ChatActivity2 extends AppCompatActivity {
 
             }
         });
-
-
-
-
 
     }
     private void sendmessage(final String message) {
@@ -256,16 +230,7 @@ public class ChatActivity2 extends AppCompatActivity {
         hashMap.put("dilihat", false);
         hashMap.put("type", "text");
         databaseReference.child("Chats").push().setValue(hashMap);
-
-
-
-
-
-
-
         Log.d(TAG,"All the MSGS   "+message);
-
-
         Log.i(TAG,"Hashmap Values  "+hashMap);
         final DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference("ChatList");
 
@@ -314,73 +279,7 @@ public class ChatActivity2 extends AppCompatActivity {
         Intent i =new Intent(getApplicationContext(),LoginsActivity.class);
         startActivity(i);
     }
-    public void displayname(View view) {
 
-        getAllUsersFromFirebase();
-
-    }
-    public void getAllUsersFromFirebase() {
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Chats")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Iterator<DataSnapshot> dataSnapshots = dataSnapshot.getChildren()
-                                .iterator();
-                        List<ModelChat> users = new ArrayList<>();
-                        while (dataSnapshots.hasNext()) {
-                            DataSnapshot dataSnapshotChild = dataSnapshots.next();
-                            ModelChat user = dataSnapshotChild.getValue(ModelChat.class);
-                            if (!TextUtils.equals(user.id,
-                                    FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                                adapterChat = new AdapterChat(ChatActivity2.this, chatList);
-                                adapterChat.notifyDataSetChanged();
-                                recyclerView.setAdapter(adapterChat);
-                                Intent i =new Intent(getApplicationContext(),Show.class);
-                                startActivity(i);
-                                Toast.makeText(getApplicationContext(), "hello"+user.message, Toast.LENGTH_SHORT).show();
-                                users.add(user);
-
-                            }
-                        }
-                        // All users are retrieved except the one who is currently logged
-                        // in device.
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Unable to retrieve the users.
-                    }
-                });
-    }
-
-//    private void getAllUser() {
-//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("AuthUsers");
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                listuer.clear();
-//
-//
-//                for (DataSnapshot ds : snapshot.getChildren()) {
-//                    ModelUsers modelUsers = ds.getValue(ModelUsers.class);
-//                    if (!modelUsers.getUid().equals(firebaseUser.getUid())) {
-//                        listuer.add(modelUsers);
-//                    }
-//                    adapterUser = new AdapterUser(getApplicationContext(), listuer);
-//                    recyclerView2.setAdapter(adapterUser);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

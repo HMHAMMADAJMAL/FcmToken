@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,15 +33,16 @@ public AdapterUser(Context context ,List<ModelUsers> userLists)
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-String userEmail=userLists.get(position).getEmail();
-holder.mEmailTv.setText(userEmail);
-holder.itemView.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        Toast.makeText(context, "my email "+userEmail ,Toast.LENGTH_SHORT).show();
-    }
-});
-
+//String userEmail=userLists.get(position).getEmail();
+//holder.mEmailTv.setText(userEmail);
+//holder.itemView.setOnClickListener(new View.OnClickListener() {
+//    @Override
+//    public void onClick(View view) {
+//        Toast.makeText(context, "my email "+userEmail ,Toast.LENGTH_SHORT).show();
+//    }
+//});
+        ModelUsers message = userLists.get(position);
+        holder.mEmailTv.setText(message.getEmail());
 
     }
 
@@ -51,11 +53,14 @@ holder.itemView.setOnClickListener(new View.OnClickListener() {
 
     class MyHolder extends RecyclerView.ViewHolder{
 
-TextView mEmailTv;
+EditText mEmailTv;
+TextView textname;
     public MyHolder(@NonNull View itemView) {
         super(itemView);
 
         mEmailTv=itemView.findViewById(R.id.emailTv);
+
+        textname=itemView.findViewById(R.id.nameTv);
     }
 }
 

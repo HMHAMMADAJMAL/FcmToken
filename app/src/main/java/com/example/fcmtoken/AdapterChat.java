@@ -1,11 +1,7 @@
 package com.example.fcmtoken;
 
-import static android.content.ContentValues.TAG;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 class AdapterChat extends RecyclerView.Adapter<AdapterChat.Myholder> {
     private static final int MSG_TYPE_LEFT = 0;

@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -100,7 +99,7 @@ public class LoginsActivity extends AppCompatActivity {
                                     // intent to home activity
                                     Intent intent
                                             = new Intent(LoginsActivity.this,
-                                            ChatActivity2.class);
+                                            Home.class);
                                     startActivity(intent);
                                 }
 

@@ -16,9 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FcmToken">
-
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".ChatActivity2"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,15 +36,7 @@
         </service>
 
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".Show" />
-        <activity android:name=".ChatActivity2"/>
-
-
-/>
-
-
-
-
+        <activity android:name=".Home" />
 
     </application>
 
