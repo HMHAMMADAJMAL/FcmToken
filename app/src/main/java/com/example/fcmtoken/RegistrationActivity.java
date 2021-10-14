@@ -61,11 +61,11 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setStackFromEnd(true);
-        recyclerViewmodaluser = findViewById(R.id.recycler_view_modal_users);
-        recyclerViewmodaluser.setHasFixedSize(true);
-        recyclerViewmodaluser.setLayoutManager(linearLayoutManager);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+//        linearLayoutManager.setStackFromEnd(true);
+//        recyclerViewmodaluser = findViewById(R.id.recycler_view_modal_users);
+//        recyclerViewmodaluser.setHasFixedSize(true);
+//        recyclerViewmodaluser.setLayoutManager(linearLayoutManager);
         email2=findViewById(R.id.email);
         list=new ArrayList<>();
         readMessagess();
@@ -98,7 +98,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference();
                         HashMap<String, Object> hashMap2 = new HashMap<>();
                         hashMap2.put("id", currentuser);
-                        hashMap2.put("Email", mail2);
+                        hashMap2.put("email", mail2);
                         Log.d(TAG,"All the MSGS   "+mail2);
 
                         databaseReference2.child("AuthProfile").push().setValue(hashMap2);
@@ -110,23 +110,24 @@ public class RegistrationActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 String name1 = dataSnapshot.getKey();
                                 Log.d(TAG,"DATASNAPSHOT KEY    "+name1);
-                                list.clear();
+//                                list.clear();
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                    ModelUsers newPost = ds.getValue(ModelUsers.class);
-                                    list.add(newPost);
-                                    adapterUser = new AdapterUser(RegistrationActivity.this, list);
-                                    adapterUser.notifyDataSetChanged();
-                                    recyclerViewmodaluser.setAdapter(adapterUser);
-                                    Log.d(TAG, "Get Email Values  "+newPost.getEmail());
-                                    Log.d(TAG, "Email  by get EMAIL: "+newPost.getEmail());
-                                    list.add(newPost);
-                                    adapterUser=new AdapterUser(getApplicationContext(),list);
-                                    recyclerViewmodaluser.setAdapter(adapterUser);
+//                                    ModelUsers newPost = ds.getValue(ModelUsers.class);
+//                                    list.add(newPost);
+//                                    adapterUser = new AdapterUser(RegistrationActivity.this, list);
+//                                    adapterUser.notifyDataSetChanged();
+//                                    recyclerViewmodaluser.setAdapter(adapterUser);
+//                                    Log.d(TAG, "Get Email Values  "+newPost.getEmail());
+//                                    Log.d(TAG, "Email  by get EMAIL: "+newPost.getEmail());
+//                                    list.add(newPost);
+
                                     Log.d(TAG, "GeT ALL THE Record of Users  : " + dataSnapshot.getValue());
 
 
 
                                 }
+//                                adapterUser=new AdapterUser(getApplicationContext(),list);
+//                                recyclerViewmodaluser.setAdapter(adapterUser);
 
                             }
 
@@ -167,11 +168,11 @@ public class RegistrationActivity extends AppCompatActivity {
 
                 list.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    ModelUsers modelChat = dataSnapshot1.getValue(ModelUsers.class);
-                    list.add(modelChat);
-                    adapterUser = new AdapterUser(RegistrationActivity.this, list);
-                    adapterUser.notifyDataSetChanged();
-                    recyclerViewmodaluser.setAdapter(adapterUser);
+//                    ModelUsers modelChat = dataSnapshot1.getValue(ModelUsers.class);
+//                    list.add(modelChat);
+//                    adapterUser = new AdapterUser(RegistrationActivity.this, list);
+//                    adapterUser.notifyDataSetChanged();
+//                    recyclerViewmodaluser.setAdapter(adapterUser);
                 }
             }
 

@@ -1,5 +1,7 @@
 package com.example.fcmtoken;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -102,7 +104,7 @@ public class ChatActivity2 extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView = findViewById(R.id.chatrecycle);
-        text=findViewById(R.id.showinfo);
+//        text=findViewById(R.id.showinfo);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         uid = getIntent().getStringExtra("uid");
@@ -161,6 +163,7 @@ public class ChatActivity2 extends AppCompatActivity {
                     name.setText(nameh);
                     msg = "" + dataSnapshot1.child("message").getValue();
                     email = "" + dataSnapshot1.child("email").getValue();
+                    Log.d(TAG, "Current user email  is this one " + msg);
 
                 }
             }

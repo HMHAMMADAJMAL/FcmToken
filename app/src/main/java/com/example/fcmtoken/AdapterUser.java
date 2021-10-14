@@ -48,19 +48,19 @@ public AdapterUser(Context context ,List<ModelUsers> userLists)
 
     @Override
     public int getItemCount() {
-        return 0;
+        return userLists.size();
     }
 
     class MyHolder extends RecyclerView.ViewHolder{
 
-EditText mEmailTv;
+TextView mEmailTv;
 TextView textname;
     public MyHolder(@NonNull View itemView) {
         super(itemView);
 
         mEmailTv=itemView.findViewById(R.id.emailTv);
 
-        textname=itemView.findViewById(R.id.nameTv);
+
     }
 }
 

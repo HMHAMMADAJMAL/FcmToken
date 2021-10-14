@@ -7,10 +7,13 @@ import android.content.Intent;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,34 +32,101 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 public class Home extends AppCompatActivity {
     TextView text;
+    RecyclerView myrecyclerview;
+    List<ModelUsers> modeluserlist;
+    AdapterUser modaladapteruser;
+    FirebaseAuth firebaseAuth;
+    String uid, myuid, image;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference users;
+    DatabaseReference databaseReference;
+    EditText msgemail;
+    ImageButton sendmsgbtn;
+    boolean notify = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display);
-        text=findViewById(R.id.showinfo);
-
-                            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("AuthProfile");
-                            ValueEventListener eventListener = new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                        text.setText("Welcome  " + dataSnapshot.getValue());
-                                    }
-                                }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
-                            };
-                            databaseReference2.addListenerForSingleValueEvent(eventListener);
-        }
+        setContentView(R.layout.activity_profile);
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        msgemail = findViewById(R.id.emailmsg);
+        sendmsgbtn = findViewById(R.id.sendemailmessagebtn);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        myrecyclerview = findViewById(R.id.recycler_view);
+//        text = findViewById(R.id.showinfo);
+        myrecyclerview.setHasFixedSize(true);
+        myrecyclerview.setLayoutManager(linearLayoutManager);
+        uid = getIntent().getStringExtra("uid");
+//        Log.i(TAG, "Current user is " + uid);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        users = firebaseDatabase.getReference("AuthProfile");
+//        getImageData();
+//        sendmsgbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                notify = true;
+//                String emailstring = msgemail.getText().toString().trim();
+//
+//                if (TextUtils.isEmpty(emailstring)) {//if empty
+//                    Toast.makeText(Home.this, "Please Write Something Here", Toast.LENGTH_LONG).show();
+//                } else {
+////                    sendemail(emailstring);
+//                }
+//                msgemail.setText("");
+//            }
+//        });
+//        Query userquery = users.orderByChild("uid").equalTo(uid);
+//        userquery.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+////                    text.setText("bxnsbbx"+dataSnapshot.getValue());
+//                    String email = "" + dataSnapshot1.child("email").getValue();
+//                    email = "" + dataSnapshot1.child("email").getValue();
+//                    Log.d(TAG, "Current user email  is " + email);
+//                }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+        readMessages();
     }
+    private void readMessages() {
+        modeluserlist = new ArrayList<>();
+        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("AuthProfile");
+        dbref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                modeluserlist.clear();
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    ModelUsers modelChat = dataSnapshot1.getValue(ModelUsers.class);
+                    Log.d(TAG, "user  record email  is " + modelChat);
+                    modeluserlist.add(modelChat);
+                }
+                Log.d(TAG, "Current user email  is " + modeluserlist.size());
+                modaladapteruser = new AdapterUser(Home.this, modeluserlist);
+                myrecyclerview.setLayoutManager(new LinearLayoutManager(Home.this));
+                myrecyclerview.setAdapter(modaladapteruser);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+}
+
