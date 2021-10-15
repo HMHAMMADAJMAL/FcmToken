@@ -62,62 +62,51 @@ import java.util.List;
 
 public class ChatActivity2 extends AppCompatActivity {
     private static final String TAG = "name";
-    Toolbar toolbar;
-    RecyclerView recyclerView;
-    ImageView profile, block;
-    TextView name, userstatus;
+
     EditText msg;
     EditText email;
-    ImageButton send, attach;
-    FirebaseAuth firebaseAuth;
-    String uid, myuid, image;
-    ValueEventListener valueEventListener;
-    List<ModelChat> chatList;
-    List<Model_User>  usersList;
-    AdapterChat adapterChat;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference users,users2;
-    FirebaseUser firebaseUser;
+    ImageButton send;
+
     boolean notify = false;
-    RecyclerView recyclerView2;
-    TextView text;
 
-    AdapterUser adapterUser;
 
-    List<ModelUsers> listuer;
+    AdapterChat adapterChat;
+    RecyclerView recyclerView;
+    List<ModelChat> chatList;
 
+
+
+    String id, myuid;
+
+    FirebaseUser user;
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference users;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        name = findViewById(R.id.name);
-        userstatus = findViewById(R.id.onlinetv);
         msg = findViewById(R.id.messaget);
         email = findViewById(R.id.email);
         send = findViewById(R.id.sendmessage);
-        attach = findViewById(R.id.attachbtn);
-        block = findViewById(R.id.block);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView = findViewById(R.id.chatrecycle);
-//        text=findViewById(R.id.showinfo);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-        uid = getIntent().getStringExtra("uid");
-        Log.i(TAG,"Current user is "+uid);
+
+        user =firebaseAuth.getInstance().getCurrentUser();
+        id=user.getUid();
+
+        Log.i(TAG,"Current user is "+id);
+
         firebaseDatabase = FirebaseDatabase.getInstance();
-        checkUserStatus();
         users = firebaseDatabase.getReference("Chats");
 
-        attach.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,42 +121,13 @@ public class ChatActivity2 extends AppCompatActivity {
                 msg.setText("");
             }
         });
-        Query userquery = users.orderByChild("uid").equalTo(uid);
+        Query userquery = users.orderByChild("id").equalTo(id);
         userquery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // retrieve user data
-                name.setText("Welcome  " + user.getEmail());
-
-
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-//                    text.setText("bxnsbbx"+dataSnapshot.getValue());
-                    String nameh = "" + dataSnapshot1.child("name").getValue();
-                    String msg = "" + dataSnapshot1.child("message").getValue();
-                    String email = "" + dataSnapshot1.child("email").getValue();
-                    image = "" + dataSnapshot1.child("image").getValue();
-                    String onlinestatus = "" + dataSnapshot1.child("onlineStatus").getValue();
-                    String typingto = "" + dataSnapshot1.child("typingTo").getValue();
-                    if (typingto.equals(myuid)) {// if user is typing to my chat
-                        userstatus.setText("Typing....");// type status as typing
-                    } else {
-                        if (onlinestatus.equals("online")) {
-                            userstatus.setText(onlinestatus);
-                        } else {
-                            Calendar calendar = Calendar.getInstance();
-//
-                            String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
-                            userstatus.setText("Last Seen:" + timedate);
-                        }
-                    }
-                    name.setText(nameh);
-                    msg = "" + dataSnapshot1.child("message").getValue();
-                    email = "" + dataSnapshot1.child("email").getValue();
-                    Log.d(TAG, "Current user email  is this one " + msg);
-
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -183,11 +143,8 @@ public class ChatActivity2 extends AppCompatActivity {
         DatabaseReference dbref2 = FirebaseDatabase.getInstance().getReference().child("AuthUsers");
         String userId = dbref.push().getKey();
         Log.d(TAG,"Chat user Id "+userId);
-        Toast.makeText(getApplicationContext(), "Get key value of Chat User  "+userId, Toast.LENGTH_SHORT).show();
         String userId2= dbref.push().getKey();
         Log.d(TAG,"Auth user Id "+userId2);
-        Toast.makeText(getApplicationContext(), "Get key value of Auth User  "+userId, Toast.LENGTH_SHORT).show();
-
         dbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -195,13 +152,14 @@ public class ChatActivity2 extends AppCompatActivity {
 
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     ModelChat modelChat = dataSnapshot1.getValue(ModelChat.class);
+                    myuid=modelChat.getId();
+                    Log.d(TAG,"Modal Chat Id  "+myuid);
                             chatList.add(modelChat);
                     adapterChat = new AdapterChat(ChatActivity2.this, chatList);
                     adapterChat.notifyDataSetChanged();
                     recyclerView.setAdapter(adapterChat);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -227,7 +185,7 @@ public class ChatActivity2 extends AppCompatActivity {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", myuid);
-        hashMap.put("receiver", uid);
+        hashMap.put("receiver", id);
         hashMap.put("message", message);
         hashMap.put("timestamp", "173");
         hashMap.put("dilihat", false);
@@ -236,13 +194,11 @@ public class ChatActivity2 extends AppCompatActivity {
         Log.d(TAG,"All the MSGS   "+message);
         Log.i(TAG,"Hashmap Values  "+hashMap);
         final DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference("ChatList");
-
         ref1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
                     ref1.child("id").setValue(myuid);
-                    Log.d(TAG,"MyuID VALUE IS  "+myuid);
                 }
             }
 
@@ -257,8 +213,7 @@ public class ChatActivity2 extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (!dataSnapshot.exists()) {
-                    ref2.child("id").setValue(uid);
-                    Log.d(TAG,"MyuID VALUE IS  "+uid);
+                    ref2.child("id").setValue(id);
                 }
             }
 
@@ -268,24 +223,9 @@ public class ChatActivity2 extends AppCompatActivity {
             }
         });
     }
-
-    private void checkUserStatus() {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-            myuid = user.getUid();
-            name.setText("Welcome  "+user.getEmail());
-        }
-
-    }
     public void btnlogout(View view) {
 
         Intent i =new Intent(getApplicationContext(),LoginsActivity.class);
         startActivity(i);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return super.onSupportNavigateUp();
     }
 }

@@ -3,13 +3,13 @@ package com.example.fcmtoken;
 public class ModelUsers {
 
 
-    String  email,uid;
+    String  email,id;
     public ModelUsers()
     {
     }
-    ModelUsers(String email,String uid) {
+    ModelUsers(String email,String id) {
         this.email = email;
-        this.uid=uid;
+        this.id=id;
     }
 
     public String getEmail() {
@@ -21,13 +21,13 @@ public class ModelUsers {
         this.email = email;
     }
 
-    public String getUid() {
-        return uid;
+    public String getid() {
+        return id;
     }
 
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setid(String id) {
+        this.id = id;
     }
 
 }

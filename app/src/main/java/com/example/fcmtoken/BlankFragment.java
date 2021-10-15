@@ -68,7 +68,7 @@ getAllUser();
            for(DataSnapshot ds: snapshot.getChildren())
            {
             ModelUsers modelUsers=ds.getValue(ModelUsers.class);
-            if(!modelUsers.getUid().equals(firebaseUser.getUid()))
+            if(!modelUsers.getid().equals(firebaseUser.getUid()))
                {
                    list.add(modelUsers);
                }

@@ -31,98 +31,71 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/name"
+                    android:id="@+id/chatscreentext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="HisName"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Chat Screen"
+                    android:layout_marginTop="30dp"
                     android:textColor="@color/PacificBlue"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:text="Logout "
-                    android:id="@+id/btnlogout"
-                     android:onClick="btnlogout"
-                   />
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ALl users"
-                    android:id="@+id/users"
-                    android:onClick="displayname"
-                   />
-
-
-
-
-                <TextView
-                    android:id="@+id/onlinetv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Online"
-                    android:textColor="@color/PacificBlue"
-                    android:textStyle="bold" />
-
 
 
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/block"
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="5dp"
-           />
+                android:layout_gravity="center"
+                android:backgroundTint="@color/PacificBlue"
+                android:layout_marginEnd="20dp"
+                android:onClick="btnlogout"
+                android:text="Log out"
+
+                />
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatrecycle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/chatlayout"
         android:layout_below="@id/toolbar"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
-        android:backgroundTint="@color/PacificBlue" />
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/PacificBlue"
+        android:layout_marginEnd="30dp" />
 
     <LinearLayout
         android:id="@+id/chatlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/attachbtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@null"
-       />
+
 
         <EditText
             android:id="@+id/messaget"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@null"
-            android:hint="Start Typing"
+            android:background="#E5E5E5"
+            android:layout_marginStart="40dp"
+            android:hint="Send Message"
             android:inputType="textCapSentences|textMultiLine"
             android:padding="15dp" />
 
         <ImageButton
             android:id="@+id/sendmessage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
             android:src="@drawable/ic_baseline_send_24"
-
      />
 
     </LinearLayout>

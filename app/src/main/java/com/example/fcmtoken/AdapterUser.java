@@ -1,6 +1,8 @@
 package com.example.fcmtoken;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +34,7 @@ public AdapterUser(Context context ,List<ModelUsers> userLists)
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyHolder holder, @SuppressLint("RecyclerView") int position) {
 //String userEmail=userLists.get(position).getEmail();
 //holder.mEmailTv.setText(userEmail);
 //holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +45,16 @@ public AdapterUser(Context context ,List<ModelUsers> userLists)
 //});
         ModelUsers message = userLists.get(position);
         holder.mEmailTv.setText(message.getEmail());
+        holder.mIdTv.setText(message.getid());
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Recycle Click" + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(view.getContext(), ChatActivity2.class);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -54,11 +65,13 @@ public AdapterUser(Context context ,List<ModelUsers> userLists)
     class MyHolder extends RecyclerView.ViewHolder{
 
 TextView mEmailTv;
-TextView textname;
+TextView mIdTv;
     public MyHolder(@NonNull View itemView) {
         super(itemView);
 
         mEmailTv=itemView.findViewById(R.id.emailTv);
+
+        mIdTv=itemView.findViewById(R.id.IdTv);
 
 
     }

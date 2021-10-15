@@ -37,6 +37,8 @@
 
         <activity android:name=".ProfileActivity" />
         <activity android:name=".Home"/>
+        <activity android:name=".ChatActivity2"/>
+        <activity android:name=".LoginsActivity"/>
 
 
     </application>

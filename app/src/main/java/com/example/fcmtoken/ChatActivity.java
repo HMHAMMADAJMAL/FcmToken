@@ -77,12 +77,9 @@ public class ChatActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        name = findViewById(R.id.name);
-        userstatus = findViewById(R.id.onlinetv);
+
         msg = findViewById(R.id.messaget);
         send = findViewById(R.id.sendmessage);
-        attach = findViewById(R.id.attachbtn);
-        buttonLogouts = findViewById(R.id.btnlogout);
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

@@ -21,7 +21,10 @@
          android:layout_width="50dp"
          android:layout_height="50dp"
          android:src="@drawable/re"
-         />
+         /><LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,5 +33,15 @@
             android:paddingStart="10dp"
             android:layout_gravity="center"
             />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Person Id"
+            android:id="@+id/IdTv"
+            android:paddingStart="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_gravity="center"/>
+        /
+    </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

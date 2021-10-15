@@ -54,5 +54,6 @@
             android:orientation="horizontal">
 
         </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
 </RelativeLayout>

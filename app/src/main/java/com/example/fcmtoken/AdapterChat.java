@@ -1,7 +1,10 @@
 package com.example.fcmtoken;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +66,7 @@ class AdapterChat extends RecyclerView.Adapter<AdapterChat.Myholder> {
 //            return MSG_TYPR_RIGHT;
 //        } else {
             return MSG_TYPE_LEFT;
-       // }
+//        }
 
 //        return MSG_TYPE_LEFT;
 
